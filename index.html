@@ -53,7 +53,7 @@ git &gt;= 1.6
 </ul></div>
 <div class="paragraph"><p>Then grab Integrity via git, install its dependencies and create the database:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -67,7 +67,7 @@ $ bundle <span style="font-weight: bold"><span style="color: #0000FF">exec</span
 navigate to <a href="http://0.0.0.0:9292">http://0.0.0.0:9292</a>.</p></div>
 <div class="paragraph"><p>Upgrade:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -91,7 +91,7 @@ $ git merge origin/master</tt></pre></div></div>
 <div class="sectionbody">
 <div class="paragraph"><p>Integrity is configured via the <tt>init.rb</tt> file using Ruby.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -191,6 +191,17 @@ command and notifiers.
 </p>
 </dd>
 <dt class="hdlist1">
+trim_branches
+</dt>
+<dd>
+<p>
+When <em>Integrity</em> is set to auto branch, it is possible for a
+large number of stale branches to stick around which no longer exist. Turning
+this on will automatically detect when a branch is deleted via the GitHub
+post-receive hook and delete the build history for the branch.
+</p>
+</dd>
+<dt class="hdlist1">
 project_default_build_count
 </dt>
 <dd>
@@ -208,35 +219,29 @@ If both the <tt>user</tt> and <tt>pass</tt> settings are set then only
 the logged-in users can administer the projects and see the private ones.
 </p>
 </dd>
-<dt class="hdlist1">
-trim_branches
-</dt>
-<dd>
-<p>
-When <em>Integrity</em> is set to auto branch, it is possible for a
-large number of stale branches to stick around which no longer exist. Turning
-this on will automatically detect when a branch is deleted via the GitHub
-post-receive hook and delete the build history for the branch.
-</p>
-</dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>c<span style="color: #990000">.</span>username <span style="color: #990000">=</span> <span style="color: #FF0000">"admin"</span>
 c<span style="color: #990000">.</span>password <span style="color: #990000">=</span> <span style="color: #FF0000">"password"</span></tt></pre></div></div>
-<div class="paragraph"><p>To protect the whole Integrity instance do this in your <tt>config.ru</tt> file:</p></div>
+<div class="paragraph"><p>To protect the whole Integrity instance, set ADMIN_USER and ADMIN_PASSWORD
+environment variables before starting Integrity:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt>use Rack<span style="color: #990000">::</span>Auth<span style="color: #990000">::</span>Basic <span style="font-weight: bold"><span style="color: #0000FF">do</span></span> <span style="color: #990000">|</span>user<span style="color: #990000">,</span> pass<span style="color: #990000">|</span>
-  user <span style="color: #990000">==</span> <span style="color: #FF0000">"admin"</span> <span style="color: #990000">&amp;&amp;</span> pass <span style="color: #990000">==</span> <span style="color: #FF0000">"secret"</span>
-<span style="font-weight: bold"><span style="color: #0000FF">end</span></span>
-run Integrity<span style="color: #990000">.</span>app</tt></pre></div></div>
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">export</span></span> <span style="color: #009900">ADMIN_USER</span><span style="color: #990000">=</span>admin <span style="color: #009900">ADMIN_PASSWORD</span><span style="color: #990000">=</span>secret</tt></pre></div></div>
+<div class="paragraph"><p>On Heroku:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>heroku config<span style="color: #990000">:</span>add <span style="color: #009900">ADMIN_USER</span><span style="color: #990000">=</span>admin <span style="color: #009900">ADMIN_PASSWORD</span><span style="color: #990000">=</span>secret</tt></pre></div></div>
 </div>
 <div class="sect2">
 <h3 id="_automating_the_builds">Automating the builds</h3>
@@ -263,7 +268,7 @@ Supports GitHub&#8217;s
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -278,7 +283,7 @@ http://www.gnu.org/software/src-highlite -->
 them as soon as possible. It relies on Ruby&#8217;s thread so it doesn&#8217;t have any
 dependency nor requires to run other processes.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -292,7 +297,7 @@ http://www.gnu.org/software/src-highlite -->
 dependencies by uncommenting the relevant lines in the <tt>Gemfile</tt> and run
 <tt>bundle lock &amp;&amp; bundle install</tt>.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -326,7 +331,7 @@ Open the <tt>Gemfile</tt>, uncomment the relevant lines and run
 Edit the <tt>init.rb</tt> file to require it. Example:
 </p>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -376,7 +381,7 @@ Run <tt>bundle install</tt> to install Thin
 </li>
 </ol></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -436,7 +441,7 @@ Run <tt>bundle install</tt> to install Unicorn
 </li>
 </ol></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
