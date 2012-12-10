@@ -215,8 +215,8 @@ HTTP authentication
 </dt>
 <dd>
 <p>
-If both the <tt>user</tt> and <tt>pass</tt> settings are set then only
-the logged-in users can administer the projects and see the private ones.
+If both <tt>username</tt> and <tt>password</tt> settings are set then
+only the logged-in users can administer the projects and see the private ones.
 </p>
 </dd>
 </dl></div>
@@ -227,21 +227,80 @@ http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>c<span style="color: #990000">.</span>username <span style="color: #990000">=</span> <span style="color: #FF0000">"admin"</span>
 c<span style="color: #990000">.</span>password <span style="color: #990000">=</span> <span style="color: #FF0000">"password"</span></tt></pre></div></div>
-<div class="paragraph"><p>To protect the whole Integrity instance, set ADMIN_USER and ADMIN_PASSWORD
+<div class="paragraph"><p>To protect the whole Integrity instance, set ADMIN_USERNAME and ADMIN_PASSWORD
 environment variables before starting Integrity:</p></div>
 <div class="listingblock">
 <div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">export</span></span> <span style="color: #009900">ADMIN_USER</span><span style="color: #990000">=</span>admin <span style="color: #009900">ADMIN_PASSWORD</span><span style="color: #990000">=</span>secret</tt></pre></div></div>
+<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">export</span></span> <span style="color: #009900">ADMIN_USERNAME</span><span style="color: #990000">=</span>admin <span style="color: #009900">ADMIN_PASSWORD</span><span style="color: #990000">=</span>secret</tt></pre></div></div>
 <div class="paragraph"><p>On Heroku:</p></div>
 <div class="listingblock">
 <div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt>heroku config<span style="color: #990000">:</span>add <span style="color: #009900">ADMIN_USER</span><span style="color: #990000">=</span>admin <span style="color: #009900">ADMIN_PASSWORD</span><span style="color: #990000">=</span>secret</tt></pre></div></div>
+<pre><tt>heroku config<span style="color: #990000">:</span>add <span style="color: #009900">ADMIN_USERNAME</span><span style="color: #990000">=</span>admin <span style="color: #009900">ADMIN_PASSWORD</span><span style="color: #990000">=</span>secret</tt></pre></div></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+checkout_proc
+</dt>
+<dd>
+<p>
+Set to a Proc instance to override default checkout mechanism.
+For example, to use <a href="https://github.com/grahamc/git-cachecow">git-cachecow</a>
+to cache repositories locally:
+</p>
+</dd>
+</dl></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>c<span style="color: #990000">.</span>checkout_proc <span style="color: #990000">=</span> Proc<span style="color: #990000">.</span>new <span style="font-weight: bold"><span style="color: #0000FF">do</span></span> <span style="color: #990000">|</span>runner<span style="color: #990000">,</span> repo_uri<span style="color: #990000">,</span> branch<span style="color: #990000">,</span> sha1<span style="color: #990000">,</span> target_directory<span style="color: #990000">|</span>
+  runner<span style="color: #990000">.</span>run! <span style="color: #FF0000">"git scclone #{repo_uri} #{target_directory} ${sha1}"</span>
+<span style="font-weight: bold"><span style="color: #0000FF">end</span></span></tt></pre></div></div>
+</div>
+<div class="sect2">
+<h3 id="_building_private_repositories">Building private repositories</h3>
+<div class="paragraph"><p>Integrity will use keys configured in its environment for repository access.</p></div>
+<div class="paragraph"><p>The easiest option is to switch to the Unix user that Integrity runs under
+and create an SSH key for this user:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>ssh-keygen</tt></pre></div></div>
+<div class="paragraph"><p>Save the key to the default location. Add the public key to the list of allowed
+keys in the repository you wish to build. Clone the repository manually to
+check that it works and trust the server&#8217;s host key if necessary.</p></div>
+<div class="paragraph"><p>An alternative is to configure <tt>GIT_SSH</tt> environment variable. Integrity ships
+with a sample <tt>git_ssh</tt> file in <tt>doc</tt> directory. Path to this file should
+be placed in the <tt>GIT_SSH</tt> environment variable. You can do this on Heroku
+by editing <tt>init.rb</tt> to include the following:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>ENV<span style="color: #990000">[</span><span style="color: #FF0000">'GIT_SSH'</span><span style="color: #990000">]</span> <span style="color: #990000">=</span> File<span style="color: #990000">.</span>join<span style="color: #990000">(</span>File<span style="color: #990000">.</span>dirname<span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">__FILE__</span></span><span style="color: #990000">),</span> <span style="color: #FF0000">'doc/git_ssh'</span><span style="color: #990000">)</span></tt></pre></div></div>
+<div class="paragraph"><p>Then, specify a private key that is allowed by repository:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>heroku config<span style="color: #990000">:</span>add <span style="color: #009900">GIT_PRIVATE_KEY</span><span style="color: #990000">=</span><span style="color: #FF0000">"----contents of private key</span>
+<span style="color: #FF0000">second line of private key</span>
+<span style="color: #FF0000">make sure to use double quotes</span>
+<span style="color: #FF0000">to allow multi-line config var value</span>
+<span style="color: #FF0000">end of private key-----------"</span></tt></pre></div></div>
+<div class="paragraph"><p>Warning: storing secret data such as private keys in environment is inherently
+insecure. If you do this, restrict access to your Integrity installation
+to trusted users only.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_automating_the_builds">Automating the builds</h3>
