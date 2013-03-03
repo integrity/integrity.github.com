@@ -1,10 +1,9 @@
 # Integrity Website
 
-Run `make` to generate the webpage.
+To regenerate website content:
 
-Original code from [integrity-website](https://github.com/integrity/integrity-website).
-
-## Dependecies
-
-* [asciidoc](http://www.methods.co.nz/asciidoc/)
-* [source-highlight](http://www.gnu.org/software/src-highlite/)
+1. Clone [integrity](https://github.com/integrity/integrity) repository.
+2. In integrity repository, run `rake html`.
+3. Copy `doc/build` from integrity repository to this repository:
+`rsync -a /path/to/integrity/doc/build/ --exclude .git /path/to/integrity.github.com`
+4. Commit and push
