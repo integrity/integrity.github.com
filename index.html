@@ -63,7 +63,7 @@ $ cd integrity
 $ git checkout -b deploy master
 $ bundle install
 $ bundle <span style="font-weight: bold"><span style="color: #0000FF">exec</span></span> rake db</tt></pre></div></div>
-<div class="paragraph"><p>To give it a quick try before going any further, run <tt>bundle exec rackup</tt> and
+<div class="paragraph"><p>To give it a quick try before going any further, run <code>bundle exec rackup</code> and
 navigate to <a href="http://0.0.0.0:9292">http://0.0.0.0:9292</a>.</p></div>
 <div class="paragraph"><p>Upgrade:</p></div>
 <div class="listingblock">
@@ -89,7 +89,7 @@ $ git merge origin/master</tt></pre></div></div>
 <div class="sect1">
 <h2 id="_configuration">Configuration</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Integrity is configured via the <tt>init.rb</tt> file using Ruby.</p></div>
+<div class="paragraph"><p>Integrity is configured via the <code>init.rb</code> file using Ruby.</p></div>
 <div class="listingblock">
 <div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
@@ -118,17 +118,17 @@ Any valid database URI supported by
 <div class="ulist"><ul>
 <li>
 <p>
-<tt>sqlite3:integrity.db</tt>
+<code>sqlite3:integrity.db</code>
 </p>
 </li>
 <li>
 <p>
-<tt>mysql://user:password@localhost/integrity</tt>
+<code>mysql://user:password@localhost/integrity</code>
 </p>
 </li>
 <li>
 <p>
-<tt>postgres://user:password@localhost/integrity</tt>
+<code>postgres://user:password@localhost/integrity</code>
 </p>
 </li>
 </ul></div>
@@ -139,8 +139,8 @@ Any valid database URI supported by
 <td class="icon">
 <div class="title">Important</div>
 </td>
-<td class="content">You need to install the appropriate <tt>data_objects</tt> adapter as well.
-The SQLite3 adapter (<tt>do_sqlite3</tt>) is installed by default.</td>
+<td class="content">You need to install the appropriate <code>data_objects</code> adapter as well.
+The SQLite3 adapter (<code>do_sqlite3</code>) is installed by default.</td>
 </tr></table>
 </div>
 <div class="dlist"><dl>
@@ -175,7 +175,7 @@ build_all!
 </dt>
 <dd>
 <p>
-Tells Integirty to build every single commit it is notified about.
+Tells Integrity to build every single commit it is notified about.
 Only builds the newest otherwise.
 </p>
 </dd>
@@ -215,7 +215,7 @@ HTTP authentication
 </dt>
 <dd>
 <p>
-If both <tt>username</tt> and <tt>password</tt> settings are set then
+If both <code>username</code> and <code>password</code> settings are set then
 only the logged-in users can administer the projects and see the private ones.
 </p>
 </dd>
@@ -260,7 +260,7 @@ by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>c<span style="color: #990000">.</span>checkout_proc <span style="color: #990000">=</span> Proc<span style="color: #990000">.</span>new <span style="font-weight: bold"><span style="color: #0000FF">do</span></span> <span style="color: #990000">|</span>runner<span style="color: #990000">,</span> repo_uri<span style="color: #990000">,</span> branch<span style="color: #990000">,</span> sha1<span style="color: #990000">,</span> target_directory<span style="color: #990000">|</span>
-  runner<span style="color: #990000">.</span>run! <span style="color: #FF0000">"git scclone #{repo_uri} #{target_directory} ${sha1}"</span>
+  runner<span style="color: #990000">.</span>run! <span style="color: #FF0000">"git scclone #{repo_uri} #{target_directory} #{sha1}"</span>
 <span style="font-weight: bold"><span style="color: #0000FF">end</span></span></tt></pre></div></div>
 </div>
 <div class="sect2">
@@ -277,10 +277,10 @@ http://www.gnu.org/software/src-highlite -->
 <div class="paragraph"><p>Save the key to the default location. Add the public key to the list of allowed
 keys in the repository you wish to build. Clone the repository manually to
 check that it works and trust the server&#8217;s host key if necessary.</p></div>
-<div class="paragraph"><p>An alternative is to configure <tt>GIT_SSH</tt> environment variable. Integrity ships
-with a sample <tt>git_ssh</tt> file in <tt>doc</tt> directory. Path to this file should
-be placed in the <tt>GIT_SSH</tt> environment variable. You can do this on Heroku
-by editing <tt>init.rb</tt> to include the following:</p></div>
+<div class="paragraph"><p>An alternative is to configure <code>GIT_SSH</code> environment variable. Integrity ships
+with a sample <code>git_ssh</code> file in <code>doc</code> directory. Path to this file should
+be placed in the <code>GIT_SSH</code> environment variable. You can do this on Heroku
+by editing <code>init.rb</code> to include the following:</p></div>
 <div class="listingblock">
 <div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
@@ -338,7 +338,7 @@ http://www.gnu.org/software/src-highlite -->
 <div class="paragraph"><p>Integrity ships with two ways of building your codes in the background.</p></div>
 <div class="sect3">
 <h4 id="_threaded">Threaded</h4>
-<div class="paragraph"><p>The <tt>threaded</tt> builder pushes the build job to an in-memory queue and processes
+<div class="paragraph"><p>The <code>threaded</code> builder pushes the build job to an in-memory queue and processes
 them as soon as possible. It relies on Ruby&#8217;s thread so it doesn&#8217;t have any
 dependency nor requires to run other processes.</p></div>
 <div class="listingblock">
@@ -351,10 +351,10 @@ http://www.gnu.org/software/src-highlite -->
 </div>
 <div class="sect3">
 <h4 id="_delayed_job">Delayed::Job</h4>
-<div class="paragraph"><p>The <tt>dj</tt> builder queue up the builds into a SQL database using
+<div class="paragraph"><p>The <code>dj</code> builder queue up the builds into a SQL database using
 <a href="http://github.com/tobi/delayed_job">Delayed::Job</a>. To use it, install its
-dependencies by uncommenting the relevant lines in the <tt>Gemfile</tt> and run
-<tt>bundle lock &amp;&amp; bundle install</tt>.</p></div>
+dependencies by uncommenting the relevant lines in the <code>Gemfile</code> and run
+<code>bundle lock &amp;&amp; bundle install</code>.</p></div>
 <div class="listingblock">
 <div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
@@ -364,7 +364,7 @@ http://www.gnu.org/software/src-highlite -->
 <div class="paragraph"><p>The second argument must be a valid
 <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-c-establish_connection">ActiveRecord
 connection hash</a>.</p></div>
-<div class="paragraph"><p>Run a worker with <tt>rake jobs:work</tt>. See
+<div class="paragraph"><p>Run a worker with <code>rake jobs:work</code>. See
 <a href="http://github.com/tobi/delayed_job#readme">Delayed::Job&#8217;s documentation</a>
 for more details.</p></div>
 </div>
@@ -374,20 +374,66 @@ for more details.</p></div>
 <div class="sect1">
 <h2 id="_notification">Notification</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>After a build status is available, you want to know it <strong>immediately</strong>,
-Integrity currently supports three notification mediums: Email, IRC and
-<a href="http://campfirenow.com">Campfire</a>. To set it up and use one of these with
-your projects:</p></div>
-<div class="olist arabic"><ol class="arabic">
+<div class="paragraph"><p>After a build status is available, you want to know it <strong>immediately</strong>.
+Integrity supports a number of notification mechanisms:</p></div>
+<div class="ulist"><ul>
 <li>
 <p>
-Open the <tt>Gemfile</tt>, uncomment the relevant lines and run
-   <tt>bundle lock &amp;&amp; bundle install</tt> to install the notifier&#8217;s dependencies.
+AMQP
 </p>
 </li>
 <li>
 <p>
-Edit the <tt>init.rb</tt> file to require it. Example:
+<a href="http://campfirenow.com">Campfire</a>
+</p>
+</li>
+<li>
+<p>
+Co-op
+</p>
+</li>
+<li>
+<p>
+Email
+</p>
+</li>
+<li>
+<p>
+HTTP
+</p>
+</li>
+<li>
+<p>
+Notifo
+</p>
+</li>
+<li>
+<p>
+Amazon SES
+</p>
+</li>
+<li>
+<p>
+Shell
+</p>
+</li>
+<li>
+<p>
+TCP
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>To enable and use a notifier with your projects:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Open the <code>Gemfile</code>, uncomment the relevant lines and run
+   <code>bundle lock &amp;&amp; bundle install</code> to install the notifier&#8217;s dependencies.
+</p>
+</li>
+<li>
+<p>
+Edit the <code>init.rb</code> file to require it. Example:
 </p>
 <div class="listingblock">
 <div class="content"><!-- Generator: GNU source-highlight 3.1.6
@@ -400,11 +446,66 @@ http://www.gnu.org/software/src-highlite -->
 </li>
 <li>
 <p>
-Restart Integrity and go to the project settings screen where you can
+Restart Integrity and go to a project settings screen where you can
    enable and configure the notifier.
 </p>
 </li>
 </ol></div>
+<div class="sect2">
+<h3 id="_http_notifier">HTTP Notifier</h3>
+<div class="paragraph"><p>This notifier sends an HTTP POST request to the specified URL. The payload is
+sent as HTML form fields, with <code>application/x-www-form-urlencoded</code> content
+type. The fields are as follows:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<code>name</code>: project name
+</p>
+</li>
+<li>
+<p>
+<code>status</code>: build status string (success/failed)
+</p>
+</li>
+<li>
+<p>
+<code>url</code>: url to build page in Integrity
+</p>
+</li>
+<li>
+<p>
+<code>repo</code>: URI specified for repository in project configuration
+</p>
+</li>
+<li>
+<p>
+<code>branch</code>: branch specified in project configuration
+</p>
+</li>
+<li>
+<p>
+<code>commit</code>: SHA1 of the commit that was built
+</p>
+</li>
+<li>
+<p>
+<code>author</code>: Commit&#8217;s author name (without email address)
+</p>
+</li>
+<li>
+<p>
+<code>message</code>: Commit message, prefixed with branch name
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Example request body:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>name=My+Test+Project&amp;status=success&amp;url=http%3A%2F%2Fwww.example.com%2Fmy-test-project%2Fbuilds%2F1&amp;repo=%2Ftmp%2Fi%2Ftmp%2Fmy_test_project&amp;branch=master&amp;commit=d669c99c26419806c80326e1b09eda378e65491d&amp;author=John+Doe&amp;message=master%3A+This+commit+will+work</tt></pre></div></div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -430,12 +531,12 @@ Restart Integrity and go to the project settings screen where you can
 <div class="olist arabic"><ol class="arabic">
 <li>
 <p>
-Uncomment the <tt>thin</tt> line in the Gemfile
+Uncomment the <code>thin</code> line in the Gemfile
 </p>
 </li>
 <li>
 <p>
-Run <tt>bundle install</tt> to install Thin
+Run <code>bundle install</code> to install Thin
 </p>
 </li>
 </ol></div>
@@ -450,7 +551,7 @@ $ thin -C doc/thin<span style="color: #990000">.</span>yml start</tt></pre></div
 <div class="listingblock">
 <div class="title">Nginx as a reverse-proxy</div>
 <div class="content">
-<pre><tt>http {
+<pre><code>http {
   upstream builder-integrityapp-com {
   server 127.0.0.1:8910;
   server 127.0.0.1:8911;
@@ -461,12 +562,12 @@ server {
   location / {
     proxy_pass http://builder-integrityapp-com;
   }
-}</tt></pre>
+}</code></pre>
 </div></div>
 <div class="listingblock">
 <div class="title">Apache acting as reverse proxy to a cluster of thin instances</div>
 <div class="content">
-<pre><tt>&lt;VirtualHost *:80&gt;
+<pre><code>&lt;VirtualHost *:80&gt;
         ServerName integrity.nationalfield.org
         ServerAlias integrity
 
@@ -482,7 +583,7 @@ server {
         ProxyPassReverse / http://127.0.0.1:8910/
 
         ProxyPassReverse / http://127.0.0.1:8911/
-&lt;/VirtualHost&gt;</tt></pre>
+&lt;/VirtualHost&gt;</code></pre>
 </div></div>
 </div>
 <div class="sect2">
@@ -490,12 +591,12 @@ server {
 <div class="olist arabic"><ol class="arabic">
 <li>
 <p>
-Uncomment the <tt>unicorn</tt> line in the Gemfile
+Uncomment the <code>unicorn</code> line in the Gemfile
 </p>
 </li>
 <li>
 <p>
-Run <tt>bundle install</tt> to install Unicorn
+Run <code>bundle install</code> to install Unicorn
 </p>
 </li>
 </ol></div>
@@ -508,23 +609,6 @@ http://www.gnu.org/software/src-highlite -->
 $ unicorn -c doc/unicorn<span style="color: #990000">.</span>rb -D</tt></pre></div></div>
 <div class="paragraph"><p>Then, configure a web proxy as outlined above for Thin.</p></div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_support_contributing">Support / Contributing</h2>
-<div class="sectionbody">
-<div class="paragraph"><p>You can get in touch via IRC at <a href="irc://irc.freenode.net/integrity">#integrity on
-freenode</a>. If no one happens to be around, you can ask our mailing list at
-<a href="mailto:integrity@librelist.com">integrity@librelist.com</a>. (<a href="http://librelist.com/browser/integrity/">Archives</a>)</p></div>
-<div class="paragraph"><p>If you find a bug, or want to give us a feature request, log it into our
-<a href="http://github.com/integrity/integrity/issues">bug tracker</a>.</p></div>
-<div class="paragraph"><p>To start hacking, grab the code from our git repository at
-<tt>git://github.com/integrity/integrity.git</tt> and setup the dependencies with
-<tt>bundle install &amp;&amp; bundle lock</tt>. Finally, hack and <tt>bundle exec rake</tt> as
-usual ;-)</p></div>
-<div class="paragraph"><p>Once you&#8217;re done, make sure your changes are rebased on on top of the <tt>master</tt>
-branch and open a new ticket in our bug tracker to let us know where we can
-pull from.</p></div>
 </div>
 </div>
 <div class="sect1">
@@ -543,6 +627,43 @@ up to date with your primary repositories.</p></div>
 environment and that it returns a <strong>zero</strong> status code for success and
 <strong>non-zero</strong> for failure, then Integrity works for you.</p></div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_support_contributing">Support / Contributing</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>You can get in touch via IRC at <a href="irc://irc.freenode.net/integrity">#integrity on
+freenode</a>. If no one happens to be around, you can ask our mailing list at
+<a href="mailto:integrity@librelist.com">integrity@librelist.com</a>. (<a href="http://librelist.com/browser/integrity/">Archives</a>)</p></div>
+<div class="paragraph"><p>If you find a bug, or want to give us a feature request, log it into our
+<a href="http://github.com/integrity/integrity/issues">bug tracker</a>.</p></div>
+<div class="paragraph"><p>To start hacking, grab the code from our git repository at
+<code>git://github.com/integrity/integrity.git</code> and setup the dependencies with
+<code>bundle install &amp;&amp; bundle lock</code>. Finally, hack and <code>bundle exec rake</code> as
+usual ;-)</p></div>
+<div class="paragraph"><p>Once you&#8217;re done, make sure your changes are rebased on on top of the <code>master</code>
+branch and open a new ticket in our bug tracker to let us know where we can
+pull from.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_documentation">Documentation</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>To build HTML documentation, run <code>rake html</code>. This is what goes on the
+Integrity website (<a href="http://integrity.github.com">http://integrity.github.com</a>).</p></div>
+<div class="paragraph"><p>Dependencies for HTML documentation generation:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+[asciidoc](<a href="http://www.methods.co.nz/asciidoc/">http://www.methods.co.nz/asciidoc/</a>)
+</p>
+</li>
+<li>
+<p>
+[source-highlight](<a href="http://www.gnu.org/software/src-highlite/">http://www.gnu.org/software/src-highlite/</a>)
+</p>
+</li>
+</ul></div>
 </div>
 </div>
 </div>
