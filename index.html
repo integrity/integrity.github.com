@@ -6,7 +6,7 @@
 <link href=integrity.css rel=stylesheet type="text/css">
 </head>
 <body>
-<p><a href="http://github.com/integrity">
+<p><a href="http://github.com/integrity/integrity">
 <img style="position: absolute; top: 0; right: 0; border: 0;"
 src="http://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
 alt="Fork me on GitHub" /></a></p>
@@ -21,7 +21,7 @@ alt="Fork me on GitHub" /></a></p>
 and makes sure everything works fine. It then reports the build status using
 various notifiers back to you and your team so everyone is on the same page
 and problems can be fixed right away.</p></div>
-<div class="paragraph"><p>Checkout Integrity watching itself:</p></div>
+<div class="paragraph"><p>Check out Integrity watching itself:</p></div>
 <div class="paragraph"><p><span class="image">
 <img src="screenshot.png" alt="Screenshot" />
 </span></p></div>
@@ -37,7 +37,7 @@ website</a> and <a href="http://en.wikipedia.org/wiki/Continuous_Integration">Wi
 <div class="ulist"><ul>
 <li>
 <p>
-Ruby &gt;= 1.8.7
+Ruby &gt;= 1.8.7 (1.8.7, 1.9.2, 1.9.3 and 2.0.0 should work)
 </p>
 </li>
 <li>
@@ -60,7 +60,7 @@ http://www.gnu.org/software/src-highlite -->
 <pre><tt>$ gem install bundler
 $ git clone git<span style="color: #990000">:</span>//github<span style="color: #990000">.</span>com/integrity/integrity
 $ cd integrity
-$ git checkout -b deploy master
+$ git checkout -b deploy v26
 $ bundle install
 $ bundle <span style="font-weight: bold"><span style="color: #0000FF">exec</span></span> rake db</tt></pre></div></div>
 <div class="paragraph"><p>To give it a quick try before going any further, run <code>bundle exec rackup</code> and
@@ -72,7 +72,7 @@ by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>$ git fetch origin
-$ git merge origin/master</tt></pre></div></div>
+$ git merge v26</tt></pre></div></div>
 </div>
 </div>
 <div class="sect1">
@@ -287,9 +287,16 @@ http://www.gnu.org/software/src-highlite -->
 <span style="color: #FF0000">make sure to use double quotes</span>
 <span style="color: #FF0000">to allow multi-line config var value</span>
 <span style="color: #FF0000">end of private key-----------"</span></tt></pre></div></div>
-<div class="paragraph"><p>Warning: storing secret data such as private keys in environment is inherently
-insecure. If you do this, restrict access to your Integrity installation
-to trusted users only.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">Storing secret data such as private keys in environment is inherently
+         insecure. If you do this, restrict access to your Integrity
+         installation to trusted users only.</td>
+</tr></table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_automating_the_builds">Automating the builds</h3>
@@ -324,7 +331,7 @@ http://www.gnu.org/software/src-highlite -->
 </div>
 <div class="sect2">
 <h3 id="_choosing_a_builder">Choosing a builder</h3>
-<div class="paragraph"><p>Integrity ships with two ways of building your codes in the background.</p></div>
+<div class="paragraph"><p>Integrity ships with three ways of building your codes in the background.</p></div>
 <div class="sect3">
 <h4 id="_threaded">Threaded</h4>
 <div class="paragraph"><p>The <code>threaded</code> builder pushes the build job to an in-memory queue and processes
@@ -337,10 +344,20 @@ http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>c<span style="color: #990000">.</span>builder <span style="color: #990000">=</span> <span style="color: #990000">:</span>threaded<span style="color: #990000">,</span> <span style="color: #993399">5</span></tt></pre></div></div>
 <div class="paragraph"><p>The second argument is the size of the thread pool.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">The threaded builder
+      <a href="https://github.com/integrity/integrity/issues/156">cannot be used
+      with Passenger</a>.</td>
+</tr></table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_delayed_job">Delayed::Job</h4>
-<div class="paragraph"><p>The <code>dj</code> builder queue up the builds into a SQL database using
+<div class="paragraph"><p>The <code>dj</code> builder queues up the builds into an SQL database using
 <a href="http://github.com/tobi/delayed_job">Delayed::Job</a>. To use it, install its
 dependencies by uncommenting the relevant lines in the <code>Gemfile</code> and run
 <code>bundle lock &amp;&amp; bundle install</code>.</p></div>
@@ -356,6 +373,17 @@ connection hash</a>.</p></div>
 <div class="paragraph"><p>Run a worker with <code>rake jobs:work</code>. See
 <a href="http://github.com/tobi/delayed_job#readme">Delayed::Job&#8217;s documentation</a>
 for more details.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_resque">Resque</h4>
+<div class="paragraph"><p>The <code>resque</code> builder, as the name implies, uses
+<a href="https://github.com/defunkt/resque">resque</a> to store jobs.</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>c<span style="color: #990000">.</span>builder <span style="color: #990000">=</span> <span style="color: #990000">:</span>resque</tt></pre></div></div>
 </div>
 </div>
 </div>
@@ -510,7 +538,8 @@ http://www.gnu.org/software/src-highlite -->
 <td class="icon">
 <div class="title">Note</div>
 </td>
-<td class="content">Currently ThreadedBuilder does not work with Passenger (issue #156).
+<td class="content">Currently ThreadedBuilder does not work with Passenger (issue
+      <a href="https://github.com/integrity/integrity/issues/156">#156</a>).
       Please use DelayedBuilder or ResqueBuilder.</td>
 </tr></table>
 </div>
@@ -536,44 +565,6 @@ http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>$ <span style="color: #009900">$EDITOR</span> doc/thin<span style="color: #990000">.</span>yml
 $ thin -C doc/thin<span style="color: #990000">.</span>yml start</tt></pre></div></div>
-<div class="paragraph"><p>Then, configure a web proxy. Examples:</p></div>
-<div class="listingblock">
-<div class="title">Nginx as a reverse-proxy</div>
-<div class="content">
-<pre><code>http {
-  upstream builder-integrityapp-com {
-  server 127.0.0.1:8910;
-  server 127.0.0.1:8911;
-}
-
-server {
-  server_name builder.integrityapp.com;
-  location / {
-    proxy_pass http://builder-integrityapp-com;
-  }
-}</code></pre>
-</div></div>
-<div class="listingblock">
-<div class="title">Apache acting as reverse proxy to a cluster of thin instances</div>
-<div class="content">
-<pre><code>&lt;VirtualHost *:80&gt;
-        ServerName integrity.nationalfield.org
-        ServerAlias integrity
-
-        ProxyRequests Off
-        ProxyPreserveHost On
-
-        &lt;Proxy *&gt;
-                Order allow,deny
-                Allow from all
-        &lt;/Proxy&gt;
-
-        ProxyPass / http://127.0.0.1:8910/
-        ProxyPassReverse / http://127.0.0.1:8910/
-
-        ProxyPassReverse / http://127.0.0.1:8911/
-&lt;/VirtualHost&gt;</code></pre>
-</div></div>
 </div>
 <div class="sect2">
 <h3 id="_a_href_http_unicorn_bogomips_org_unicorn_a"><a href="http://unicorn.bogomips.org/">Unicorn</a></h3>
@@ -596,7 +587,88 @@ http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>$ <span style="color: #009900">$EDITOR</span> doc/unicorn<span style="color: #990000">.</span>rb
 $ unicorn -c doc/unicorn<span style="color: #990000">.</span>rb -D</tt></pre></div></div>
-<div class="paragraph"><p>Then, configure a web proxy as outlined above for Thin.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_reverse_proxy">Reverse Proxy</h3>
+<div class="paragraph"><p>You will want to run a reverse proxy such as Nginx or Apache in front of
+Thin or Unicorn servers.</p></div>
+<div class="sect3">
+<h4 id="_a_href_http_nginx_org_nginx_a"><a href="http://nginx.org/">Nginx</a></h4>
+<div class="paragraph"><p>Nginx can be configured as follows:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>http {
+  upstream builder-integrityapp-com {
+  # thin or unicorn - first instance
+  server 127.0.0.1:8910;
+  # thin only - specify all remaining instances
+  server 127.0.0.1:8911;
+}
+
+server {
+  server_name builder.integrityapp.com;
+  location / {
+    proxy_pass http://builder-integrityapp-com;
+  }
+}</code></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_a_href_http_httpd_apache_org_apache_a"><a href="http://httpd.apache.org/">Apache</a></h4>
+<div class="paragraph"><p>Apache can be configured as follows:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;VirtualHost *:80&gt;
+        ServerName ci.example.org
+        ServerAlias ci
+
+        ProxyRequests Off
+        ProxyPreserveHost On
+
+        &lt;Proxy *&gt;
+                Order allow,deny
+                Allow from all
+        &lt;/Proxy&gt;
+
+        ProxyPass / http://127.0.0.1:8910/
+        ProxyPassReverse / http://127.0.0.1:8910/
+
+        ProxyPassReverse / http://127.0.0.1:8911/
+&lt;/VirtualHost&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>If you wish Apache to serve static files:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;VirtualHost *:80&gt;
+        ServerName ci.example.org
+        ServerAlias ci
+
+        ProxyRequests Off
+        ProxyPreserveHost On
+
+        &lt;Proxy *&gt;
+                Order allow,deny
+                Allow from all
+        &lt;/Proxy&gt;
+
+        DocumentRoot /path/to/integrity/lib/app/public
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteRule ^/(.*)$ http://localhost:8910/$1 [P]
+&lt;/VirtualHost&gt;
+
+&lt;Directory /path/to/integrity/lib/app/public&gt;
+        Order allow,deny
+        Allow from all
+        Options None
+        AllowOverride None
+
+        # Apache 2.4+
+        AuthType None
+        Require all granted
+&lt;/Directory&gt;</code></pre>
+</div></div>
+</div>
 </div>
 </div>
 </div>
@@ -660,7 +732,9 @@ Integrity website (<a href="http://integrity.github.com">http://integrity.github
   <div class=credits>
     Integrity is &copy; 2008, 2009, 2010
     <a href="http://nicolassanguinetti.info">Nicolás Sanguinetti</a>
-    and <a href="http://atonie.org">Simon Rozet</a>
+    and <a href="http://atonie.org">Simon Rozet</a>,
+    &copy; 2012, 2013
+    <a href="http://bsdpower.com">Oleg Pudeyev</a>
   </div>
   <div class=links>
     <a href="http://github.com/integrity/integrity/issues">Bugs / Support</a>
@@ -668,19 +742,5 @@ Integrity website (<a href="http://integrity.github.com">http://integrity.github
     <a href="http://github.com/integrity/integrity">Source Code</a>
   </div>
 </div>
-<script type="text/javascript">
-  //<![CDATA[
-  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-  //]]>
-  </script>
-  <script type="text/javascript">
-    //<![CDATA[
-      try {
-      var pageTracker = _gat._getTracker("UA-6377994-1");
-      pageTracker._trackPageview();
-      } catch(err) {}
-    //]]>
-  </script>
   </body>
 </html>
